@@ -1,6 +1,4 @@
 from IPython import get_ipython
-
-
 import numpy as np
 from testCases import *
 from public_tests import *
@@ -66,7 +64,6 @@ def backward_propagation(x, theta):
     return dtheta
 
 
-# %%
 x, theta = 2, 4
 dtheta = backward_propagation(x, theta)
 print("dtheta = " + str(dtheta))
@@ -99,9 +96,13 @@ def gradient_check(x, theta, epsilon=1e-7, print_msg=False):
     theta_minus = theta - epsilon
     J_plus = forward_propagation(x, theta_plus)
     J_minus = forward_propagation(x, theta_minus)
-    gradapprox = (J_plus - J_minus) / 2 * epsilon
+    gradapprox = (J_plus - J_minus) / (2 * epsilon)
     # YOUR CODE ENDS HERE
 
+    # Check if gradapprox is close enough to the output of backward_propagation()
+    # (approx. 1 line) DO NOT USE "grad = gradapprox"
+    # grad =
+    # YOUR CODE STARTS HERE
     grad = backward_propagation(x, theta)
 
     # YOUR CODE ENDS HERE
@@ -134,6 +135,7 @@ def gradient_check(x, theta, epsilon=1e-7, print_msg=False):
     return difference
 
 
+# %%
 x, theta = 2, 4
 difference = gradient_check(2, 4, print_msg=True)
 
@@ -280,7 +282,7 @@ def gradient_check_n(parameters, gradients, X, Y, epsilon=1e-7, print_msg=False)
         # J_minus[i], _ =                                 # Step 3
         # YOUR CODE STARTS HERE
         theta_minus = np.copy(parameters_values)
-        theta_minus[i][0] = theta_minus[i][0] + epsilon
+        theta_minus[i][0] = theta_minus[i][0] - epsilon
         J_minus[i], _ = forward_propagation_n(X, Y, vector_to_dictionary(theta_minus))
         # YOUR CODE ENDS HERE
 
@@ -321,7 +323,6 @@ def gradient_check_n(parameters, gradients, X, Y, epsilon=1e-7, print_msg=False)
     return difference
 
 
-# %%
 X, Y, parameters = gradient_check_n_test_case()
 
 cost, cache = forward_propagation_n(X, Y, parameters)
